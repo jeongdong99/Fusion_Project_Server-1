@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.SubjectMapper">
+    <resultMap id="result" type="persistence.DTO.SubjectDTO">
+        <result property="id" column="subject_id"/>
+        <result property="subjectName" column="subject_name"/>
+        <result property="subjectCode" column="subject_code" />
+        <result property="targetGrade" column="target_grade"/>
+        <result property="semester" column="semester"/>
+        <result property="credit" column="credit"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="result">
+        SELECT * FROM SUBJECTS
+    </select>
+
+    <select id="selectByGrade" resultMap="result">
+        SELECT * FROM SUBJECTS WHERE target_grade = #{grade}
+    </select>
+
+    <select id="selectIdBySubjectCode" resultMap="result">
+        SELECT * FROM SUBJECTS WHERE subject_code = #{subjectCode}
+    </select>
+
+    <insert id="insertOneSubject">
+        INSERT INTO SUBJECTS (subject_code, subject_name, target_grade, semester, credit)
+        VALUES (#{subjectCode}, #{subjectName}, #{targetGrade}, #{semester}, #{credit})
+    </insert>
+
+    <update id="updateOneSubjectName">
+        UPDATE SUBJECTS SET subject_name = #{newSubjectName} WHERE subject_code = #{subjectCode}
+    </update>
+
+
+</mapper>
