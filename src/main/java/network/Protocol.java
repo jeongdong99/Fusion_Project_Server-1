@@ -1,4 +1,4 @@
-package controller;
+package network;
 
 public class Protocol {
 
@@ -78,7 +78,7 @@ public class Protocol {
     }
 
 
-    public void setBody(byte[] data, int offset, int count) {
+    public void addBody(byte[] data, int offset, int count) {
 
         int length = data.length;
         packet.body[flag++] = (byte)(length >> 8);
