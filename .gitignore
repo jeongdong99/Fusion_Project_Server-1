@@ -163,5 +163,5 @@ gradle
 # End of https://www.toptal.com/developers/gitignore/api/java,intellij,gradle
 
 
-main/resources/config/config.xml
-main/java/persistence/DAO/UserDAO.java
+./main/resources/config/config.xml
+./main/java/persistence/DAO/UserDAO.java
