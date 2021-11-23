@@ -1,6 +1,7 @@
 package service;
 
 import persistence.DAO.ProfessorDAO;
+import persistence.DTO.AdminDTO;
 import persistence.DTO.ProfessorDTO;
 
 import java.util.List;
@@ -51,5 +52,17 @@ public class ProfessorService {
         return result;
     }
 
+    public boolean login(String id, String password){
+        ProfessorDTO professorDTO = professorDAO.findByProfessorId(id);
 
+        if(professorDTO == null){
+            return false;
+        }else{
+            if(professorDTO.getPassword().equals(password)){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
 }

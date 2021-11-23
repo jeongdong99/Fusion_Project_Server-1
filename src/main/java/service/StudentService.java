@@ -53,4 +53,17 @@ public class StudentService {
 
     }
 
+    public boolean login(String id, String password){
+        StudentDTO studentDTO = studentDAO.findByStudentId(id);
+
+        if(studentDTO == null){
+            return false;
+        }else{
+            if(studentDTO.getPassword().equals(password)){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
 }

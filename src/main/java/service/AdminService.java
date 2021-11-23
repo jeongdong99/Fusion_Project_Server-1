@@ -43,4 +43,18 @@ public class AdminService {
 
     }
 
+    public boolean login(String id, String password){
+        AdminDTO adminDTO = adminDAO.findByAdminId(id);
+
+        if(adminDTO == null){
+            return false;
+        }else{
+            if(adminDTO.getPassword().equals(password)){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+
 }
