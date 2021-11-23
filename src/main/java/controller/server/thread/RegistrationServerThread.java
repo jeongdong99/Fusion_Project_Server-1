@@ -5,10 +5,7 @@ import persistence.DAO.AdminDAO;
 import persistence.DAO.LectureTimeTableDAO;
 import persistence.DAO.ProfessorDAO;
 import persistence.DAO.StudentDAO;
-import persistence.DTO.AdminDTO;
-import persistence.DTO.ProfessorDTO;
-import persistence.DTO.StudentDTO;
-import persistence.DTO.SubjectDTO;
+import persistence.DTO.*;
 import service.*;
 
 import java.io.*;
@@ -16,11 +13,14 @@ import java.net.Socket;
 import java.util.List;
 
 public class RegistrationServerThread extends Thread{
+
     private Socket socket;
     InputStream is;
-    BufferedReader reader;
+    BufferedInputStream bi;
     OutputStream os;
-    BufferedWriter writer;
+    BufferedOutputStream bo;
+
+    int loginTried = 0;
 
     public RegistrationServerThread(Socket socket){
         this.socket = socket;
@@ -28,19 +28,97 @@ public class RegistrationServerThread extends Thread{
 
     public void run(){
         open();
-        System.out.println("접속 완료");
+        System.out.println("스레드 생성 완료");
 
-        while(true){
+        byte[] header = new byte[Protocol.LEN_HEADER_SIZE];
+        byte[] body;
 
-        }
+        try {
+
+            while(true){
+
+                int flag;
+                System.out.println("대기중...");
+                bi.read(header);
+                System.out.println("데이터 수신!");
+
+                int bodyLength = byteToInt(header, 3);
+
+                body = new byte[bodyLength];
+
+                if (header[0] == Protocol.RESPONSE) continue; // error??
+
+                switch(header[1]) {
+
+                    case Protocol.LOGIN:
+
+                        login(header, body);
+                        break;
+
+
+
+
+                    case Protocol.LOGOUT:
+
+                    case Protocol.CREATE:
+
+
+
+
+                    default:
+                        System.out.println("이해할 수 없는 메세지");
+                        break;
+
+
+
+                }
+            }
+
+        } catch (IOException e) { e.printStackTrace(); }
+    }
+
+    private void login(byte[] header, byte[] body) {
+
+        int userType = header[2];
+        int bodyLength = byteToInt(header, 3);
+
+        String id;
+        String pw;
+
+        int flag = 0;
+
+        int dataLength = byteToInt(body, flag);
+        flag += 2;
+
+        id = new String(body, flag, dataLength);
+        flag += dataLength;
+        pw = new String(body, flag, dataLength);
+
+        System.out.println("userType : " + userType);
+        System.out.println("id : " + id);
+        System.out.println("pw : " + pw);
+
+        /*if (userType == Protocol.ADMIN) adminLogin(id, pw, loginTried++);
+        else if (userType == Protocol.STUDENT) stdLogin(id, pw, loginTried);
+        else if (userType == Protocol.PROFESSOR) professorLogin(id, pw, loginTried);*/
+
+    }
+
+    private int byteToInt(byte[] data, int pos) {
+
+        int result = ((int) (data[pos] & 0xff) << 8) |
+                     ((int) data[pos+1] & 0xff);
+
+        return result;
+
     }
 
     private void open(){
         try{
             is = socket.getInputStream();
-            reader = new BufferedReader(new InputStreamReader(is));
+            bi = new BufferedInputStream(is);
             os = socket.getOutputStream();
-            writer = new BufferedWriter(new OutputStreamWriter(os));
+            bo = new BufferedOutputStream(os);
         }catch(IOException e){
             e.printStackTrace();
         }
