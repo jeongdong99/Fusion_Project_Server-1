@@ -1,4 +1,4 @@
-package network;
+package controller.protocol;
 
 public class Protocol {
 
