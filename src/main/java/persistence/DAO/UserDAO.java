@@ -19,8 +19,8 @@ public class UserDAO {
         try {
 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://localhost/project";
-            conn = DriverManager.getConnection(url, "root", "tutu4934");
+            String url = "jdbc:mysql://localhost/FusionProject";
+            conn = DriverManager.getConnection(url, "root", "lcy556622@");
 
         }
         catch (ClassNotFoundException e) { e.printStackTrace(); }

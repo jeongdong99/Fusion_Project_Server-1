@@ -1,4 +1,4 @@
-package controller;
+package controller.protocol;
 
 public class Protocol {
 
@@ -91,11 +91,5 @@ public class Protocol {
 
     public byte[] getHeader() {return packet.header;}
     public byte[] getBody() {return packet.body;}
-
-
-
-
-
-
 
 }
