@@ -1,5 +1,7 @@
 package controller.server;
 
+import controller.server.thread.RegistrationServerThread;
+
 import java.io.*;
 import java.net.*;
 
@@ -17,9 +19,9 @@ public class RegistrationServer {
             System.out.println("Server socket created.Waiting for connection...");
 
             conn = ss.accept();
-
+            RegistrationServerThread client = new RegistrationServerThread(conn);
             System.out.println("Connection received from " + conn.getInetAddress().getHostName() + " : " + conn.getPort());
-            // create Thread class
+            System.out.println("클라이언트 접속");
 
 
         } catch (IOException e) {

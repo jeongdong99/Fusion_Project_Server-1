@@ -6,7 +6,7 @@ import java.net.Socket;
 public class RegistrationServerThread extends Thread{
     private Socket socket;
 
-    RegistrationServerThread(Socket socket){
+    public RegistrationServerThread(Socket socket){
         this.socket = socket;
     }
 
