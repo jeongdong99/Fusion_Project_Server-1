@@ -52,16 +52,16 @@ public class ProfessorService {
         return result;
     }
 
-    public boolean login(String id, String password){
+    public ProfessorDTO login(String id, String password){
         ProfessorDTO professorDTO = professorDAO.findByProfessorId(id);
 
         if(professorDTO == null){
-            return false;
+            return null;
         }else{
             if(professorDTO.getPassword().equals(password)){
-                return true;
+                return professorDTO;
             }else{
-                return false;
+                return null;
             }
         }
     }

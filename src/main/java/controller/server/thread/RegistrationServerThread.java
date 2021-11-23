@@ -5,6 +5,7 @@ import persistence.DAO.AdminDAO;
 import persistence.DAO.LectureTimeTableDAO;
 import persistence.DAO.ProfessorDAO;
 import persistence.DAO.StudentDAO;
+import persistence.DTO.AdminDTO;
 import persistence.DTO.ProfessorDTO;
 import persistence.DTO.StudentDTO;
 import persistence.DTO.SubjectDTO;
@@ -56,41 +57,38 @@ public class RegistrationServerThread extends Thread{
 
     //로그인
     private void adminLogin(String id, String password, int loginCount){
-        boolean isLogin;
 
         if(loginCount <= 5){
             //5회 실패 패킷 전송
         }
 
         //관리자 로그인
-        isLogin = adminService.login(id, password);
+        AdminDTO adminDTO = adminService.login(id, password);
 
         //성공 여부 패킷 전송
 
     }
 
     private void professorLogin(String id, String password, int loginCount){
-        boolean isLogin;
 
         if(loginCount <= 5){
             //5회 실패 패킷 전송
         }
 
         //교수 로그인
-        isLogin = professorService.login(id, password);
+        ProfessorDTO professorDTO = professorService.login(id, password);
 
         //성공 여부 패킷 전송
     }
 
     private void stdLogin(String id, String password, int loginCount){
-        boolean isLogin;
 
         if(loginCount <= 5){
             //5회 실패 패킷 전송
         }
 
         //학생 로그인
-        isLogin = stdService.login(id, password);
+        StudentDTO studentDTO = stdService.login(id, password);
 
         //성공 여부 패킷 전송
     }

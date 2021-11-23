@@ -43,16 +43,16 @@ public class AdminService {
 
     }
 
-    public boolean login(String id, String password){
+    public AdminDTO login(String id, String password){
         AdminDTO adminDTO = adminDAO.findByAdminId(id);
 
         if(adminDTO == null){
-            return false;
+            return null;
         }else{
             if(adminDTO.getPassword().equals(password)){
-                return true;
+                return adminDTO;
             }else{
-                return false;
+                return null;
             }
         }
     }
