@@ -22,11 +22,9 @@ public class RegistrationServer {
             // create Thread class
 
 
+        } catch (IOException e) {
+            System.err.println("IOException");
         }
-
-        catch(IOException e) {System.err.println("IOException"); }
-
-
 
     }
 }
