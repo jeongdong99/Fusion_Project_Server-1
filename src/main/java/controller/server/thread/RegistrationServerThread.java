@@ -11,6 +11,7 @@ import service.*;
 import java.io.*;
 import java.net.Socket;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RegistrationServerThread extends Thread{
@@ -18,6 +19,9 @@ public class RegistrationServerThread extends Thread{
     private Socket socket;
     InputStream is;
     OutputStream os;
+    Protocol protocol;
+    ByteArrayInputStream bais;
+    DataInputStream dis;
 
     int loginTried = 0;
 
@@ -28,6 +32,7 @@ public class RegistrationServerThread extends Thread{
     public void run(){
         open();
         System.out.println("스레드 생성 완료");
+
 
         byte[] header = new byte[Protocol.LEN_HEADER_SIZE];
         byte[] body;
@@ -45,6 +50,9 @@ public class RegistrationServerThread extends Thread{
 
                 body = new byte[bodyLength];
                 if (bodyLength != 0) is.read(body);
+
+                bais = new ByteArrayInputStream(body);
+                dis = new DataInputStream(bais);
 
                 int actionType = header[Protocol.INDEX_ACTION];
                 int targetType = header[Protocol.INDEX_CODE];
@@ -115,25 +123,13 @@ public class RegistrationServerThread extends Thread{
         } catch (IOException e) { e.printStackTrace(); }
     }
 
-    private void login(byte[] header, byte[] body) {
+    private void login(byte[] header, byte[] body) throws IOException {
 
-        int userType = header[2];
-        int bodyLength = byteToInt(header, 3);
+        int userType = header[Protocol.INDEX_CODE];
+        int bodyLength = byteToInt(header, Protocol.INDEX_BODY_LENGTH);
 
-        String id;
-        String pw;
-
-        int flag = 0;
-
-        int dataLength = byteToInt(body, flag);
-        flag += 2;
-
-        id = new String(body, flag, dataLength);
-        flag += dataLength;
-
-        dataLength = byteToInt(body, flag);
-        flag += 2;
-        pw = new String(body, flag, dataLength);
+        String id = dis.readUTF();
+        String pw = dis.readUTF();
 
         System.out.println("userType : " + userType);
         System.out.println("id : " + id);
@@ -150,6 +146,8 @@ public class RegistrationServerThread extends Thread{
         int result = ((int) (data[pos] & 0xff) << 8) |
                      ((int) data[pos+1] & 0xff);
 
+        ArrayList arr = new ArrayList();
+
         return result;
 
     }
@@ -157,9 +155,8 @@ public class RegistrationServerThread extends Thread{
     private void open(){
         try{
             is = socket.getInputStream();
-            // bi = new BufferedInputStream(is);
             os = socket.getOutputStream();
-            // bo = new BufferedOutputStream(os);
+            protocol = new Protocol();
         }catch(IOException e){
             e.printStackTrace();
         }
