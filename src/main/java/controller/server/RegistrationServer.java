@@ -25,7 +25,6 @@ public class RegistrationServer {
                 RegistrationServerThread client = new RegistrationServerThread(conn);
                 client.start();
                 System.out.println("Connection received from " + conn.getInetAddress().getHostName() + " : " + conn.getPort());
-
             }
 
         } catch (IOException e) {
