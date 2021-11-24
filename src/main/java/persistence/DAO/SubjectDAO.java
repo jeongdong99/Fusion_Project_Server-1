@@ -3,6 +3,7 @@ package persistence.DAO;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import persistence.DTO.SubjectDTO;
+import persistence.mapper.Subject.SubjectMapper;
 
 import java.util.HashMap;
 import java.util.List;
@@ -78,6 +79,42 @@ public class SubjectDAO {
         }
     }
 
+    public void updateTargetGrade(int targetGrade, int subjectId){
+        SqlSession session = sqlSessionFactory.openSession();
 
+        try{
+            SubjectMapper mapper = session.getMapper(SubjectMapper.class);
+            mapper.updateTargetGrade(targetGrade, subjectId);
 
+            session.commit();
+        }finally{
+            session.close();
+        }
+    }
+
+    public void updateSemester(int semester, int subjectId){
+        SqlSession session = sqlSessionFactory.openSession();
+
+        try{
+            SubjectMapper mapper = session.getMapper(SubjectMapper.class);
+            mapper.updateSemester(semester, subjectId);
+
+            session.commit();
+        }finally{
+            session.close();
+        }
+    }
+
+    public void updateCredit(int credit, int subjectId){
+        SqlSession session = sqlSessionFactory.openSession();
+
+        try{
+            SubjectMapper mapper = session.getMapper(SubjectMapper.class);
+            mapper.updateCredit(credit, subjectId);
+
+            session.commit();
+        }finally{
+            session.close();
+        }
+    }
 }

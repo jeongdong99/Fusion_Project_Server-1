@@ -12,6 +12,7 @@ import java.io.*;
 import java.net.Socket;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public class RegistrationServerThread extends Thread{
 
@@ -173,6 +174,7 @@ public class RegistrationServerThread extends Thread{
     StudentService stdService = new StudentService(new StudentDAO());
     StudentTimeTableService stdTableService = new StudentTimeTableService();
     SubjectService subjectService = new SubjectService();
+    DepartmentService departmentService = new DepartmentService();
 
     // 프로토콜 사용법
     // Protocol protocol = new Protocol();
@@ -232,39 +234,100 @@ public class RegistrationServerThread extends Thread{
     }
 
     //교수 생성
-    private void professorInsert(List<ProfessorDTO> list) {
-//        for(int i = 0; i < list.size(); i++) {
-//            professorService.insertProfessor(list.get(i));
-//        }
+    private void professorInsert(byte[] header, byte[] body) {
+        ProfessorDTO professorDTO;
+        String name, password, phoneNumber, professorId, departmentName;
+        int departmentId;
+
+        int flag = 0;
+
+        int dataLength = byteToInt(body, flag);
+        flag += 2;
+
+        professorId = new String(body, flag, dataLength);
+        flag += dataLength;
+
+        dataLength = byteToInt(body, flag);
+        flag += 2;
+        departmentName = new String(body, flag, dataLength);
+
+        //departmentName으로 departmentId를 받아오는 기능
+        departmentId = departmentService.selectDepartmentIdByDepartName(departmentName);
+
+        professorDTO = new ProfessorDTO(name, password, phoneNumber, departmentId, professorId);
+
+        professorService.insertProfessor(professorDTO);
 
         //교수 생성 성공 패킷 전송
 
     }
 
     //학생 생성
-    private void stdInsert(/*List<StudentDTO> studentDTOS*/){
-//        for(int i = 0; i < studentDTOS.size(); i++){
-//            stdService.insertStudent(studentDTOS.get(i));
-//        }
+    private void stdInsert(byte[] header, byte[] body){
+        StudentDTO studentDTO;
+        String name, password, phoneNumber, studentId, departmentName;
+        int departmentId;
+        int grade;
+
+        int flag = 0;
+
+        int dataLength = byteToInt(body, flag);
+        flag += 2;
+
+        studentId = new String(body, flag, dataLength);
+        flag += dataLength;
+
+        dataLength = byteToInt(body, flag);
+        flag += 2;
+        departmentName = new String(body, flag, dataLength);
+
+        //departmentName으로 departmentId를 받아오는 기능
+        departmentId = departmentService.selectDepartmentIdByDepartName(departmentName);
+
+        studentDTO = new StudentDTO(name, password, phoneNumber, studentId, departmentId, grade);
+
+        stdService.insertStudent(studentDTO);
 
         //학생 생성 성공 패킷 전송
 
     }
 
     //교과목 생성
-    private void subjectInsert(/*List<SubjectDTO> subjectDTOS*/){
-//        for(int i = 0; i < subjectDTOS.size(); i++){
-//            subjectService.insertOneSubject(subjectDTOS.get(i));
-//        }
+    private void subjectInsert(byte[] header, byte[] body){
+        SubjectDTO subjectDTO;
+        int targetGrade, semester, credit;
+        String subjectCode, subjectName, phoneNumber;
+
+        int flag = 0;
+
+        int dataLength = byteToInt(body, flag);
+        flag += 2;
+
+        studentId = new String(body, flag, dataLength);
+        flag += dataLength;
+
+        dataLength = byteToInt(body, flag);
+        flag += 2;
+        departmentName = new String(body, flag, dataLength);
+
+        subjectDTO = new SubjectDTO(subjectCode, subjectName, targetGrade, semester, credit);
+
+        subjectService.insertOneSubject(subjectDTO);
+
 
         //교과목 생성 성공 패킷 전송
 
     }
 
     //교과목 수정
-    private void changeSubject(List<SubjectDTO> subjectDTOS){
+    private void updateSubject(byte[] header, byte[] body){
         //기능 구현 필요
+        SubjectDTO subjectDTO;
+        int targetGrade, semester, credit;
+        String subjectCode, subjectName, phoneNumber;
 
+        subjectDTO = new SubjectDTO(subjectCode, subjectName, targetGrade, semester, credit);
+        subjectService.updateSubject(subjectDTO);
         //교과목 수정 결과 응답
     }
 
@@ -319,7 +382,7 @@ public class RegistrationServerThread extends Thread{
     }
 
     //개설 교과목 수정
-    private void changeOpeningSubject(List<OpeningSubjectDTO> openingSubjectDTOS){
+    private void updateOpeningSubject(List<OpeningSubjectDTO> openingSubjectDTOS){
         for(int i = 0; i < openingSubjectDTOS.size(); i++){
             //기능 구현? or 지금 구현되어 있는 capacity update
         }

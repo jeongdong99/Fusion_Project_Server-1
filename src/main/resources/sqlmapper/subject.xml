@@ -31,7 +31,7 @@
     </insert>
 
     <update id="updateOneSubjectName">
-        UPDATE SUBJECTS SET subject_name = #{newSubjectName} WHERE subject_code = #{subjectCode}
+        UPDATE SUBJECTS SET subject_name = #{newSubjectName} WHERE subject_code = #{subjectCode}d
     </update>
 
 
