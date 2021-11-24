@@ -6,6 +6,7 @@ import persistence.DAO.LectureTimeTableDAO;
 import persistence.DAO.ProfessorDAO;
 import persistence.DAO.StudentDAO;
 import persistence.DTO.*;
+import persistence.converter.Converter;
 import service.*;
 
 import java.io.*;
@@ -61,7 +62,7 @@ public class RegistrationServerThread extends Thread{
                 switch (actionType) {
                     case Protocol.LOGIN:
 
-                        login(header, body);
+                        login(header);
                         break;
 
                     case Protocol.LOGOUT:
@@ -124,7 +125,7 @@ public class RegistrationServerThread extends Thread{
         } catch (IOException e) { e.printStackTrace(); }
     }
 
-    private void login(byte[] header, byte[] body) throws IOException {
+    private void login(byte[] header) throws IOException {
 
         int userType = header[Protocol.INDEX_CODE];
         int bodyLength = byteToInt(header, Protocol.INDEX_BODY_LENGTH);
@@ -137,8 +138,8 @@ public class RegistrationServerThread extends Thread{
         System.out.println("pw : " + pw);
 
         if (userType == Protocol.ADMIN) adminLogin(id, pw, loginTried++);
-        else if (userType == Protocol.STUDENT) stdLogin(id, pw, loginTried);
-        else if (userType == Protocol.PROFESSOR) professorLogin(id, pw, loginTried);
+        else if (userType == Protocol.STUDENT) stdLogin(id, pw, loginTried++);
+        else if (userType == Protocol.PROFESSOR) professorLogin(id, pw, loginTried++);
 
     }
 
@@ -173,15 +174,9 @@ public class RegistrationServerThread extends Thread{
     SubjectService subjectService = new SubjectService();
     DepartmentService departmentService = new DepartmentService();
 
-    // 프로토콜 사용법
-    // Protocol protocol = new Protocol();
-    // protocol.setHeader(1, 0, 0, 0, 0, 0); >> 관리자 로그인 요청
-    // String id = "adminID";
-    // byte[] tmp = id.getBytes();
-    // protocol.addBody(tmp, 0, )
 
     //로그인
-    private void adminLogin(String id, String password, int loginCount){
+    private void adminLogin(String id, String password, int loginCount) throws IOException {
 
         if(loginCount <= 5){
             //5회 실패 패킷 전송
@@ -189,14 +184,25 @@ public class RegistrationServerThread extends Thread{
 
         //관리자 로그인
         AdminDTO adminDTO = adminService.login(id, password);
-        System.out.println("result : " + adminDTO);
-        //성공 여부 패킷 전송
-//        Protocol protocol = new Protocol();
-//        if(adminDTO.getAdminId() != null) { //성공
-//            protocol.setHeader((byte) 1, (byte) 0, (byte) 10, (byte) 0, (byte) 0, 0);
-//        }else{ //실패
-//            protocol.setHeader((byte) 1, (byte) 0, (byte) 9, (byte) 0, (byte) 0, 0);
-//        }
+        protocol.init();
+
+        if (adminDTO != null) { // 성공
+
+            protocol.setHeader(Protocol.RESPONSE, Protocol.LOGIN, Protocol.SUCCESS,
+                    Protocol.UNUSED, Protocol.UNUSED, Protocol.UNUSED);
+            Converter.writeAdmin(protocol, adminDTO);
+
+        }
+
+        else { // 실패
+
+            protocol.setHeader(Protocol.RESPONSE, Protocol.LOGIN, Protocol.FAIL,
+                    Protocol.UNUSED, Protocol.UNUSED, Protocol.UNUSED);
+
+        }
+
+        os.write(protocol.getPacket());
+
     }
 
     private void professorLogin(String id, String password, int loginCount){
@@ -251,9 +257,9 @@ public class RegistrationServerThread extends Thread{
         //departmentName으로 departmentId를 받아오는 기능
         departmentId = departmentService.selectDepartmentIdByDepartName(departmentName);
 
-        professorDTO = new ProfessorDTO(name, password, phoneNumber, departmentId, professorId);
+        // professorDTO = new ProfessorDTO(name, password, phoneNumber, departmentId, professorId);
 
-        professorService.insertProfessor(professorDTO);
+        // professorService.insertProfessor(professorDTO);
 
         //교수 생성 성공 패킷 전송
 
@@ -281,9 +287,9 @@ public class RegistrationServerThread extends Thread{
         //departmentName으로 departmentId를 받아오는 기능
         departmentId = departmentService.selectDepartmentIdByDepartName(departmentName);
 
-        studentDTO = new StudentDTO(name, password, phoneNumber, studentId, departmentId, grade);
+        // studentDTO = new StudentDTO(name, password, phoneNumber, studentId, departmentId, grade);
 
-        stdService.insertStudent(studentDTO);
+        // stdService.insertStudent(studentDTO);
 
         //학생 생성 성공 패킷 전송
 
@@ -300,16 +306,16 @@ public class RegistrationServerThread extends Thread{
         int dataLength = byteToInt(body, flag);
         flag += 2;
 
-        studentId = new String(body, flag, dataLength);
+        // studentId = new String(body, flag, dataLength);
         flag += dataLength;
 
         dataLength = byteToInt(body, flag);
         flag += 2;
-        departmentName = new String(body, flag, dataLength);
+        // departmentName = new String(body, flag, dataLength);
 
-        subjectDTO = new SubjectDTO(subjectCode, subjectName, targetGrade, semester, credit);
+        // subjectDTO = new SubjectDTO(subjectCode, subjectName, targetGrade, semester, credit);
 
-        subjectService.insertOneSubject(subjectDTO);
+        // subjectService.insertOneSubject(subjectDTO);
 
 
         //교과목 생성 성공 패킷 전송
@@ -323,8 +329,8 @@ public class RegistrationServerThread extends Thread{
         int targetGrade, semester, credit;
         String subjectCode, subjectName, phoneNumber;
 
-        subjectDTO = new SubjectDTO(subjectCode, subjectName, targetGrade, semester, credit);
-        subjectService.updateSubject(subjectDTO);
+        // subjectDTO = new SubjectDTO(subjectCode, subjectName, targetGrade, semester, credit);
+        // subjectService.updateSubject(subjectDTO);
         //교과목 수정 결과 응답
     }
 

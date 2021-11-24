@@ -64,8 +64,8 @@ public class Protocol {
 
     public void init() {
         packet = new Packet();
-        if (baos!= null) baos = new ByteArrayOutputStream();
-        if (dos != null) dos = new DataOutputStream(baos);
+        baos = new ByteArrayOutputStream();
+        dos = new DataOutputStream(baos);
     }
 
     public void setHeader(
