@@ -34,7 +34,7 @@ public class RegistrationServerThread extends Thread{
 
         try {
 
-            while(true){
+            while(true) {
 
                 int flag;
                 System.out.println("대기중...");
@@ -46,38 +46,68 @@ public class RegistrationServerThread extends Thread{
                 body = new byte[bodyLength];
                 if (bodyLength != 0) is.read(body);
 
-                /*System.out.println("bodyLength = " + bodyLength);
-                System.out.print("header : ");
-                for(int i=0; i<header.length; i++) System.out.print(header[i]);
-                System.out.println();
-                System.out.print("body : ");
-                for(int i=0; i<body.length; i++) System.out.print(body[i]);
-                System.out.println();*/
+                int actionType = header[Protocol.INDEX_ACTION];
+                int targetType = header[Protocol.INDEX_CODE];
 
-                switch(header[1]) {
-
+                switch (actionType) {
                     case Protocol.LOGIN:
 
                         login(header, body);
                         break;
 
-
-
-
                     case Protocol.LOGOUT:
+                        switch (targetType) {
+                            case Protocol.ADMIN:
+                            case Protocol.STUDENT:
+                            case Protocol.PROFESSOR:
+                        }
                         break;
-
                     case Protocol.CREATE:
+                        switch (targetType) {
+                            case Protocol.ADMIN:
+                            case Protocol.STUDENT:
+                            case Protocol.PROFESSOR:
+                            case Protocol.SUBJECT:
+                            case Protocol.OPENING_SUBJECT:
+                            case Protocol.REGISTRATION:
+                            case Protocol.SYLLABUS:
+                        }
                         break;
-
-
-
-
-                    default:
-                        System.out.println("이해할 수 없는 메세지");
+                    case Protocol.READ:
+                        switch (targetType) {
+                            case Protocol.ADMIN:
+                            case Protocol.STUDENT:
+                            case Protocol.PROFESSOR:
+                            case Protocol.SUBJECT:
+                            case Protocol.LECTURE_TIME_TABLE:
+                            case Protocol.OPENING_SUBJECT:
+                            case Protocol.REGISTRATION:
+                            case Protocol.STUDENT_TIME_TABLE:
+                            case Protocol.SYLLABUS:
+                        }
                         break;
-
-
+                    case Protocol.UPDATE:
+                        switch (targetType) {
+                            case Protocol.ADMIN:
+                            case Protocol.STUDENT:
+                            case Protocol.PROFESSOR:
+                            case Protocol.SUBJECT:
+                            case Protocol.LECTURE_TIME_TABLE:
+                            case Protocol.OPENING_SUBJECT:
+                            case Protocol.SYLLABUS:
+                        }
+                        break;
+                    case Protocol.DELETE:
+                        switch (targetType) {
+                            case Protocol.ADMIN:
+                            case Protocol.STUDENT:
+                            case Protocol.PROFESSOR:
+                            case Protocol.SUBJECT:
+                            case Protocol.OPENING_SUBJECT:
+                            case Protocol.REGISTRATION:
+                            case Protocol.SYLLABUS:
+                        }
+                        break;
 
                 }
             }

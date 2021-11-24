@@ -3,14 +3,16 @@ package controller.protocol;
 public class Protocol {
 
     public static final byte LEN_HEADER_SIZE = 9;
-    public static final byte LEN_MESSAGE_TYPE = 1;
-    public static final byte LEN_ACTION = 1;
-    public static final byte LEN_CODE = 1;
-    public static final byte LEN_BODY_LENGTH = 2;
-    public static final byte LEN_FRAG = 1;
-    public static final byte LEN_LAST = 1;
-    public static final byte LEN_SEQ_NUMBER = 2;
     public static final int LEN_MAX_LENGTH = 1000;
+
+
+    public static final byte INDEX_MESSAGE_TYPE = 0;
+    public static final byte INDEX_ACTION = 1;
+    public static final byte INDEX_CODE = 2;
+    public static final byte INDEX_BODY_LENGTH = 3;
+    public static final byte INDEX_FRAG = 5;
+    public static final byte INDEX_LAST = 6;
+    public static final byte INDEX_SEQ_NUMBER = 7;
 
     // message type
     public static final byte REQUEST = 0;
