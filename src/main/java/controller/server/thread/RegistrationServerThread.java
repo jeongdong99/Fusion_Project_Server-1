@@ -16,9 +16,7 @@ public class RegistrationServerThread extends Thread{
 
     private Socket socket;
     InputStream is;
-    BufferedInputStream bi;
     OutputStream os;
-    BufferedOutputStream bo;
 
     int loginTried = 0;
 
@@ -39,14 +37,21 @@ public class RegistrationServerThread extends Thread{
 
                 int flag;
                 System.out.println("대기중...");
-                bi.read(header);
+                is.read(header);
                 System.out.println("데이터 수신!");
 
                 int bodyLength = byteToInt(header, 3);
 
                 body = new byte[bodyLength];
+                if (bodyLength != 0) is.read(body);
 
-                if (header[0] == Protocol.RESPONSE) continue; // error??
+                /*System.out.println("bodyLength = " + bodyLength);
+                System.out.print("header : ");
+                for(int i=0; i<header.length; i++) System.out.print(header[i]);
+                System.out.println();
+                System.out.print("body : ");
+                for(int i=0; i<body.length; i++) System.out.print(body[i]);
+                System.out.println();*/
 
                 switch(header[1]) {
 
@@ -59,8 +64,10 @@ public class RegistrationServerThread extends Thread{
 
 
                     case Protocol.LOGOUT:
+                        break;
 
                     case Protocol.CREATE:
+                        break;
 
 
 
@@ -92,15 +99,18 @@ public class RegistrationServerThread extends Thread{
 
         id = new String(body, flag, dataLength);
         flag += dataLength;
+
+        dataLength = byteToInt(body, flag);
+        flag += 2;
         pw = new String(body, flag, dataLength);
 
         System.out.println("userType : " + userType);
         System.out.println("id : " + id);
         System.out.println("pw : " + pw);
 
-        /*if (userType == Protocol.ADMIN) adminLogin(id, pw, loginTried++);
+        if (userType == Protocol.ADMIN) adminLogin(id, pw, loginTried++);
         else if (userType == Protocol.STUDENT) stdLogin(id, pw, loginTried);
-        else if (userType == Protocol.PROFESSOR) professorLogin(id, pw, loginTried);*/
+        else if (userType == Protocol.PROFESSOR) professorLogin(id, pw, loginTried);
 
     }
 
@@ -116,9 +126,9 @@ public class RegistrationServerThread extends Thread{
     private void open(){
         try{
             is = socket.getInputStream();
-            bi = new BufferedInputStream(is);
+            // bi = new BufferedInputStream(is);
             os = socket.getOutputStream();
-            bo = new BufferedOutputStream(os);
+            // bo = new BufferedOutputStream(os);
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -142,7 +152,7 @@ public class RegistrationServerThread extends Thread{
 
         //관리자 로그인
         AdminDTO adminDTO = adminService.login(id, password);
-
+        System.out.println("result : " + adminDTO);
         //성공 여부 패킷 전송
 
     }

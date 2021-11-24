@@ -44,17 +44,17 @@ public class AdminService {
     }
 
     public AdminDTO login(String id, String password){
-        AdminDTO adminDTO = adminDAO.findByAdminId(id);
 
-        if(adminDTO == null){
-            return null;
-        }else{
-            if(adminDTO.getPassword().equals(password)){
-                return adminDTO;
-            }else{
-                return null;
-            }
-        }
+        AdminDTO adminDTO = adminDAO.findByAdminId(id);
+        System.out.println(adminDTO);
+
+        if(adminDTO == null) return null;
+
+        if(adminDTO.getPassword().equals(password)) return adminDTO;
+
+        return null;
+
     }
+
 
 }
