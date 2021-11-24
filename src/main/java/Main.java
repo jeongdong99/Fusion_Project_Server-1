@@ -122,7 +122,7 @@ public class Main {
 
         //------------------------------------2번 구현시작----------------------------------------------
         // 02. 교과목
-        SubjectService subjectService = new SubjectService();
+        /*SubjectService subjectService = new SubjectService();
 
         //1학년 과목
         SubjectDTO java = new SubjectDTO("CS0010", "자바프로그래밍", 1, 2, 3);
@@ -140,7 +140,7 @@ public class Main {
         SubjectDTO designPattern = new SubjectDTO("CS0027", "디자인패턴", 3, 2, 3);
 
         //4학년 과목
-        SubjectDTO compiler = new SubjectDTO("CS0035", "컴파일러", 4, 2, 3);
+        SubjectDTO compiler = new SubjectDTO("CS0035", "컴파일러", 4, 2, 3);*/
 
         //교과목 생성
         /*subjectService.insertOneSubject(java);
@@ -308,14 +308,14 @@ public class Main {
         // 컴파일러 CS0035-01 월6
         // 운영체제 CS0017-01 월6
         // 디자인패턴 CS0027-01 월67
-        registrationService.insertRegistration("CS0027-01", "20180335");
+        // registrationService.insertRegistration("CS0027-01", "20180335");
 
         // System.out.println("나의 신청 내역");
         // registrationService.findRegistrationWithStdId("20180335").stream().forEach(v -> System.out.println(v.toString()));
 
 
         //최대 수강 인원 초과 예외
-        registrationService.insertRegistration("CS0017-01", "20180002"); // 2번째
+        // registrationService.insertRegistration("CS0017-01", "20180002"); // 2번째
         // registrationService.insertRegistration("CS0017-01", "20180596"); // 2번째
         // registrationService.insertRegistration("CS0017-01", "20180950"); // 2번째
         // registrationService.insertRegistration("CS0027-01", "20180596"); // 3번째
@@ -324,11 +324,19 @@ public class Main {
        // 07. 페이징 처리
         // 해당 개설 교과목에 수강신청한 학생 조회 (교수 관점)
         // RegistrationService registrationService = new RegistrationService();
-        List listt = registrationService.getStdListByOpeningSubjectId(49,2);
+        /*List listt = registrationService.getStdListByOpeningSubjectId(49,2);
         // if (listt != null)
         System.out.println("=================");
             listt.stream().forEach(v -> System.out.println(v.toString()));
-        System.out.println("=================");
+        System.out.println("=================");*/
+
+
+        AdminService adminService = new AdminService(new AdminDAO());
+        AdminDTO dto = adminService.findByAdminId("ADMIN2");
+        System.out.println(dto);
+
+        dto = adminService.login("ADMIN2", "pass");
+        System.out.println(dto);
 
 
     }

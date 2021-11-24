@@ -79,10 +79,10 @@ public class AdminDAO extends UserDAO {
 
                 adminDTO = new AdminDTO(
                         userId,
-                        adminId,
                         name,
                         password,
-                        phoneNumber
+                        phoneNumber,
+                        adminId
                 );
 
                 return adminDTO;

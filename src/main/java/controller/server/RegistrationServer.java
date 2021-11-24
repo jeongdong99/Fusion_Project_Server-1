@@ -19,9 +19,10 @@ public class RegistrationServer {
             System.out.println("Server socket created.Waiting for connection...");
 
             conn = ss.accept();
-            RegistrationServerThread client = new RegistrationServerThread(conn);
-            System.out.println("Connection received from " + conn.getInetAddress().getHostName() + " : " + conn.getPort());
             System.out.println("클라이언트 접속");
+            RegistrationServerThread client = new RegistrationServerThread(conn);
+            client.start();
+            System.out.println("Connection received from " + conn.getInetAddress().getHostName() + " : " + conn.getPort());
 
 
         } catch (IOException e) {
