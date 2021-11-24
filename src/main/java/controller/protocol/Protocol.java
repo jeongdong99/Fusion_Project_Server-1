@@ -73,36 +73,36 @@ public class Protocol {
     }
 
     public void setHeader(
-            byte messageType,
-            byte action,
-            byte code,
-            byte frag,
-            byte last,
+            int messageType,
+            int action,
+            int code,
+            int frag,
+            int last,
             int seqNumber
     ) {
 
-        packet.header[0] = messageType;
-        packet.header[1] = action;
-        packet.header[2] = code;
+        packet.header[INDEX_MESSAGE_TYPE] = (byte)messageType;
+        packet.header[INDEX_ACTION] = (byte)action;
+        packet.header[INDEX_CODE] = (byte)code;
 
         // set body length >> set Body 끝난 이후 설정하는 것이 좋겠다
         /*packet.header[3] = (byte)(bodyLength >> 8);
         packet.header[4] = (byte)(bodyLength);*/
 
-        packet.header[5] = frag;
-        packet.header[6] = last;
+        packet.header[INDEX_FRAG] = (byte)frag;
+        packet.header[INDEX_LAST] = (byte)last;
 
         // set SeqNumber
-        packet.header[7] = (byte)(seqNumber >> 8);
-        packet.header[8] = (byte)(seqNumber);
+        packet.header[INDEX_SEQ_NUMBER] = (byte)(seqNumber >> 8);
+        packet.header[INDEX_SEQ_NUMBER+1] = (byte)(seqNumber);
 
     }
 
     public void setBodyLength() {
 
         // set body length >> set Body 끝난 이후 설정하는 것이 좋겠다
-        packet.header[3] = (byte)(flag >> 8);
-        packet.header[4] = (byte)(flag);
+        packet.header[INDEX_BODY_LENGTH] = (byte)(flag >> 8);
+        packet.header[INDEX_BODY_LENGTH+1] = (byte)(flag);
 
     }
 
@@ -138,9 +138,5 @@ public class Protocol {
     // String id = "adminID";
     // byte[] tmp = id.getBytes();
     // protocol.addBody(tmp, 0, )
-
-
-
-
 
 }
