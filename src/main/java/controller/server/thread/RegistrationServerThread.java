@@ -12,6 +12,7 @@ import java.io.*;
 import java.net.Socket;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public class RegistrationServerThread extends Thread{
 
@@ -54,32 +55,7 @@ public class RegistrationServerThread extends Thread{
                 for(int i=0; i<body.length; i++) System.out.print(body[i]);
                 System.out.println();*/
 
-                switch(header[1]) {
 
-                    case Protocol.LOGIN:
-
-                        login(header, body);
-                        break;
-
-
-
-
-                    case Protocol.LOGOUT:
-                        break;
-
-                    case Protocol.CREATE:
-                        break;
-
-
-
-
-                    default:
-                        System.out.println("이해할 수 없는 메세지");
-                        break;
-
-
-
-                }
             }
 
         } catch (IOException e) { e.printStackTrace(); }
@@ -202,9 +178,9 @@ public class RegistrationServerThread extends Thread{
     }
 
     //교수 생성
-    private void professorInsert(List<ProfessorDTO> list) {
-//        for(int i = 0; i < list.size(); i++) {
-//            professorService.insertProfessor(list.get(i));
+    private void professorInsert(List<ProfessorDTO> professorDTOS) {
+//        for(int i = 0; i < professorDTOS.size(); i++) {
+//            professorService.insertProfessor(professorDTOS.get(i));
 //        }
 
         //교수 생성 성공 패킷 전송
@@ -212,9 +188,9 @@ public class RegistrationServerThread extends Thread{
     }
 
     //학생 생성
-    private void stdInsert(/*List<StudentDTO> list*/){
-//        for(int i = 0; i < list.size(); i++){
-//            stdService.insertStudent(list.get(i));
+    private void stdInsert(/*List<StudentDTO> studentDTOS*/){
+//        for(int i = 0; i < studentDTOS.size(); i++){
+//            stdService.insertStudent(studentDTOS.get(i));
 //        }
 
         //학생 생성 성공 패킷 전송
@@ -222,9 +198,9 @@ public class RegistrationServerThread extends Thread{
     }
 
     //교과목 생성
-    private void subjectInsert(/*List<SubjectDTO> list*/){
-//        for(int i = 0; i < list.size(); i++){
-//            subjectService.insertOneSubject(list.get(i));
+    private void subjectInsert(/*List<SubjectDTO> subjectDTOS*/){
+//        for(int i = 0; i < subjectDTOS.size(); i++){
+//            subjectService.insertOneSubject(subjectDTOS.get(i));
 //        }
 
         //교과목 생성 성공 패킷 전송
@@ -232,7 +208,7 @@ public class RegistrationServerThread extends Thread{
     }
 
     //교과목 수정
-    private void changeSubject(/*변경할 Data*/){
+    private void changeSubject(List<SubjectDTO> subjectDTOS){
         //기능 구현 필요
 
         //교과목 수정 결과 응답
@@ -299,7 +275,7 @@ public class RegistrationServerThread extends Thread{
 
     //개설 교과목 삭제
     private void deleteOpeningSubject(OpeningSubjectDTO openingSubjectDTO){
-        //기능 구현(DTO에서 개설 교과목 id 뽑아서 인수로 넘겨줌)
+        //기능 구현(DTO에서 개설 교과목 id 뽑아서 파라미터로 넘겨줌)
 
         //개설 교과목 삭제 결과 응답
     }
@@ -327,28 +303,59 @@ public class RegistrationServerThread extends Thread{
     }
 
     //강의계획서 입력
-    private void syllabusInput(/*SyllabusDto syllabusdto*/){
+    private void syllabusInput(/*List<SyllabusDto> syllabusDtos*/){
         //기능 구현 필요
 
         //강의계획서 입력 결과 응답
     }
 
     //강의계획서 수정
-    private void updateSyllabus(){
+    private void updateSyllabus(/*List<SyllabusDto> syllabusDtos*/){
+        //기능 구현 필요
 
+        //강의계획서 수정 결과 응답
     }
 
     //담당 교과목 조회
+    private void selectResponsibilitySubject(List<ProfessorDTO> professorDTOS){
+        List<Map<String, Object>> list =
+                openingSubjectService.selectByGradeOrProfessorId(0, professorDTOS.get(0).getName()); //어차피 이름을 하나만 받을꺼니깐?
+
+        //담당 교과목 조회 결과 전송
+    }
 
     //담당 교과목 강의 계획서 조회
+    private void selectResponsibilitySyllabus(List<ProfessorDTO> professorDTOS){
+        //professorDTOS의 이름으로 담당 교과목 검색하여 담당 교과목 id검색하여 강의 계획서 조회
+
+        //담당 교과목 강의 계획서 조회
+    }
 
     //담당 교과목 시간표
+    private void professorTimeTable(/*List<ProfessorDTO> professorDTOS*/){
+        //교수 id로 시간표 겁색 기능 구현 필요
+
+        //담당 교과목 시간표 결과 응답
+    }
 
     //학생 개인정보 수정
+    private void updateStdInfo(List<StudentDTO> studentDTOS){
+        //학생 정보 수정 기능 구현 필요(현재 이름 바꾸는 기능은 있음)
+
+        //학생 정보 수정 결과 응답
+    }
 
     //학생 비밀번호 수정
+    private void updateStdPassword(List<StudentDTO> studentDTOS){
+        //학생 비밀번호 수정 기능 구현 필요
+
+        //학생 비밀번호 수정 결과 응답
+    }
 
     //수강 신청
+    private void registration(){
+
+    }
 
     //수강 신청 취소
 
