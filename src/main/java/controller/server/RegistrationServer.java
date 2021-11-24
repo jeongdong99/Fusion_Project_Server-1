@@ -18,14 +18,14 @@ public class RegistrationServer {
             ss = new ServerSocket(3000);
             System.out.println("Server socket created.Waiting for connection...");
 
-            while(true){
+            while(true) {
+
                 conn = ss.accept();
                 System.out.println("클라이언트 접속");
                 RegistrationServerThread client = new RegistrationServerThread(conn);
                 client.start();
                 System.out.println("Connection received from " + conn.getInetAddress().getHostName() + " : " + conn.getPort());
             }
-
 
         } catch (IOException e) {
             System.err.println("IOException");

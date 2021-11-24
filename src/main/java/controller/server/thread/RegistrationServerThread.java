@@ -12,7 +12,6 @@ import java.io.*;
 import java.net.Socket;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 public class RegistrationServerThread extends Thread{
 
@@ -47,15 +46,70 @@ public class RegistrationServerThread extends Thread{
                 body = new byte[bodyLength];
                 if (bodyLength != 0) is.read(body);
 
-                /*System.out.println("bodyLength = " + bodyLength);
-                System.out.print("header : ");
-                for(int i=0; i<header.length; i++) System.out.print(header[i]);
-                System.out.println();
-                System.out.print("body : ");
-                for(int i=0; i<body.length; i++) System.out.print(body[i]);
-                System.out.println();*/
+                int actionType = header[Protocol.INDEX_ACTION];
+                int targetType = header[Protocol.INDEX_CODE];
 
+                switch (actionType) {
+                    case Protocol.LOGIN:
 
+                        login(header, body);
+                        break;
+
+                    case Protocol.LOGOUT:
+                        switch (targetType) {
+                            case Protocol.ADMIN:
+                            case Protocol.STUDENT:
+                            case Protocol.PROFESSOR:
+                        }
+                        break;
+                    case Protocol.CREATE:
+                        switch (targetType) {
+                            case Protocol.ADMIN:
+                            case Protocol.STUDENT:
+                            case Protocol.PROFESSOR:
+                            case Protocol.SUBJECT:
+                            case Protocol.OPENING_SUBJECT:
+                            case Protocol.REGISTRATION:
+                            case Protocol.SYLLABUS:
+                        }
+                        break;
+                    case Protocol.READ:
+                        switch (targetType) {
+                            case Protocol.ADMIN:
+                            case Protocol.STUDENT:
+                            case Protocol.PROFESSOR:
+                            case Protocol.SUBJECT:
+                            case Protocol.LECTURE_TIME_TABLE:
+                            case Protocol.OPENING_SUBJECT:
+                            case Protocol.REGISTRATION:
+                            case Protocol.STUDENT_TIME_TABLE:
+                            case Protocol.SYLLABUS:
+                        }
+                        break;
+                    case Protocol.UPDATE:
+                        switch (targetType) {
+                            case Protocol.ADMIN:
+                            case Protocol.STUDENT:
+                            case Protocol.PROFESSOR:
+                            case Protocol.SUBJECT:
+                            case Protocol.LECTURE_TIME_TABLE:
+                            case Protocol.OPENING_SUBJECT:
+                            case Protocol.SYLLABUS:
+                        }
+                        break;
+                    case Protocol.DELETE:
+                        switch (targetType) {
+                            case Protocol.ADMIN:
+                            case Protocol.STUDENT:
+                            case Protocol.PROFESSOR:
+                            case Protocol.SUBJECT:
+                            case Protocol.OPENING_SUBJECT:
+                            case Protocol.REGISTRATION:
+                            case Protocol.SYLLABUS:
+                        }
+                        break;
+
+                }
             }
 
         } catch (IOException e) { e.printStackTrace(); }
@@ -178,9 +232,9 @@ public class RegistrationServerThread extends Thread{
     }
 
     //교수 생성
-    private void professorInsert(List<ProfessorDTO> professorDTOS) {
-//        for(int i = 0; i < professorDTOS.size(); i++) {
-//            professorService.insertProfessor(professorDTOS.get(i));
+    private void professorInsert(List<ProfessorDTO> list) {
+//        for(int i = 0; i < list.size(); i++) {
+//            professorService.insertProfessor(list.get(i));
 //        }
 
         //교수 생성 성공 패킷 전송
